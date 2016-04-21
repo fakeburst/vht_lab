@@ -1,0 +1,44 @@
+<html>
+    <head>
+        <title>AnimeRecommendation</title>
+        <script src="hello.js"></script>
+        <script src="https://apis.google.com/js/client.js?onload=init"></script>
+        <link rel="stylesheet" href="main.css">
+        <link rel="stylesheet" href="metro/css/metro.min.css">
+        <link rel="stylesheet" href="metro/css/metro-icons.min.css">
+        <script src="metro/js/metro.min.js"></script>
+        <script src="register.js"></script>
+    </head>
+    <body>
+        <div class="grid condensed" style="margin:0;">
+            <div class="row borders-main color-register"></div>
+            <div class="row cells12">
+                <div class="cell colspan4"></div>
+                <div class="cell colspan4 register" id="center">
+                    <div>
+                        <h1 class="text-light">Login</h1>
+                        <hr class="thin color-register"/>
+                        <br />
+                        <div class="input-control text full-size" data-role="input">
+                            <label for="user_login">User login:</label>
+                            <input type="text" name="user_login" id="user_login">
+                            <button class="button helper-button clear"><span class="mif-cross"></span></button>
+                        </div>
+                        <br />
+                        <br />
+                        <div class="input-control password full-size" data-role="input">
+                            <label for="user_password">User password:</label>
+                            <input type="password" name="user_password" id="user_password">
+                            <button class="button helper-button reveal"><span class="mif-looks"></span></button>
+                        </div>
+                        <br />
+                        <br />
+                        <button class="button success color-register" onclick="login()">Login</button>
+                    </div>
+                </div>
+                <div class="cell colspan4"></div>
+            </div>
+            <div class="row borders-main color-register"></div>
+        </div>
+    </body>
+</html>

@@ -9,7 +9,9 @@
  * After the client library has loaded, this init() function is called.
  * The init() function loads the helloworldendpoints API.
  */
-
+var search = false;
+var login = false;
+var user_login;
 function init() {
 	
 	// You need to pass the root path when you load your API
@@ -35,7 +37,119 @@ function init() {
  */
 function loadCallback () {	
 	// Enable the button actions
-	enableButtons ();
+    //enableButtons();
+	alert("Ready");
+}
+
+function recommend()
+{
+    var request = gapi.client.helloworldendpoints.getAnime({"user":user_login});
+	request.execute(getAnimeCallback);
+}
+
+function recommendCallback(response)
+{
+    var elem = document.getElementById("recommend");
+    elem.innerHTML = "";
+    for(var i = 0; i < response.length; i++)
+        {
+            elem.innerHTML+= response[i] + "\n"
+        }
+}
+
+function addFromQuest()
+{
+    search = true;
+    addAnime();
+}
+
+function getAnimes(){
+    var string = document.getElementById("title").value;
+    search = true;
+    getAnime(string);
+}
+
+function getAnime(string)
+{
+    var request = gapi.client.helloworldendpoints.getAnime({"anime":string});
+	request.execute(getAnimeCallback);
+}
+    
+function getAnimeCallback(response)
+{
+    if(search)
+    {
+        anime = JSON.parse(response.result.message);
+        var elem = document.getElementById("animes");
+        elem.innerHTML = "";
+        for(var i = 0; i < anime.length; ++i)
+            {
+                elem.innerHTML += "<option>" + anime[i].title + "</option>";   
+            }
+        search = false;
+        return;
+    }
+    //console.log(response);
+    anime = JSON.parse(response.result.message)[0];
+    console.log(anime);
+    //console.log(response.result.message);
+
+    parent.innerHTML = "<h1 id=\"anime_title\">" + anime.title + "</h1>";
+    children.innerHTML = "<div class=\"cell answers\"><img src=\"" + anime.cover_image + "\"</div>";
+    children.innerHTML += "<div class=\"cell colspan4 answers\">" + anime.synopsis + "</div>";
+    children.innerHTML += "<div class=\"cell answers\"><div class=\"input-control text\" style=\"width:100%\"><input type=\"number\" id=\"rating\" min=\"1\" max=\"10\"></div><button class=\"button color-quest\" onclick=\"addFromQuest\">Add to list</button></div>";
+}
+
+function register()
+{
+    var res = [document.getElementById("user_login").value,document.getElementById("user_password").value];
+    if(document.getElementById("login_hummingbird").value!=null)
+        res[2] = document.getElementById("login_hummingbird").value;
+    var request = gapi.client.helloworldendpoints.register({"values":res});
+    request.execute(registerCallback);
+}
+
+function registerCallback(response)
+{
+    var elem = document.getElementById("center");
+    elem.innerHTML = "<div class=\"input-control text full-text\" style=\"width:100%\" data-role=\"input\"><input type=\"text\" id=\"title\"><button class=\"button\" onclick=\"getAnimes()\"><span class=\"mif-search\"></span></button></div><div class=\"input-control select\" style=\"width:84%\"><select id=\"animes\"></select></div><div class=\"input-control text\" style=\"width:15%\"><input type=\"number\" id=\"rating\" min=\"1\" max=\"10\"></div><button class=\"button success color-register\" onclick=\"addAnime\">Add to list</button><a href=\"index.html\" class=\"button success color-register\">Return</a>";
+}
+
+function addAnime()
+{
+    if(search)
+    {
+        var animeTitle = document.getElementById("anime_title").innerHTML;
+        var rating = document.getElementById("rating").value;
+        var request = gapi.client.helloworldendpoints.register({"anime":animeTitle, "rating":rating});
+        search = false;
+        request.execute(addAnimeCallback);
+
+    } else {
+    var animes = document.getElementById("animes")
+    var animeTitle = animes.options[animes.selectedIndex].text;
+    var rating = document.getElementById("rating").value;
+    var request = gapi.client.helloworldendpoints.register({"anime":animeTitle, "rating":rating});
+    request.execute(addAnimeCallback);
+    }
+}
+
+function addAnimeCallback(response)
+{
+    var request = gapi.client.helloworldendpoints.register({"login":animeTitle, "password":rating});
+    request.execute(addAnimeCallback);
+}
+
+function login()
+{
+    var res = [document.getElementById("user_login").value,document.getElementById("user_password").value];
+    var request = gapi.client.helloworldendpoints.register({"login":res[0], "password":res[1]});
+    request.execute(loginCallback);
+}
+
+function loginCallback(response)
+{
+    user_login = response;
 }
 
 function enableButtons () {
@@ -64,57 +178,6 @@ function enableButtons () {
 	
 	// Update the button label now that the button is active
 	btn.value="GIMME A CAT!";
-}
-
-/*
- * Execute a request to the sayHello() endpoints function
- */
-function greetGenerically () {
-	// Construct the request for the sayHello() function
-	var request = gapi.client.helloworldendpoints.sayHello();
-	
-	// Execute the request.
-	// On success, pass the response to sayHelloCallback()
-	request.execute(sayHelloCallback);
-}
-
-/*
- * Execute a request to the sayHelloByName() endpoints function.
- * Illustrates calling an endpoints function that takes an argument.
- */
-function greetByName () {
-	// Get the name from the name_field element
-	var name = document.getElementById("name_field").value;
-	
-	// Call the sayHelloByName() function.
-	// It takes one argument "name"
-	// On success, pass the response to sayHelloCallback()
-	var request = gapi.client.helloworldendpoints.sayHelloByName({'name': name});
-	request.execute(sayHelloCallback);
-}
-
-// Process the JSON response
-// In this case, just show an alert dialog box
-// displaying the value of the message field in the response
-function sayHelloCallback (response) {
-	alert(response.message);	
-}
-
-function getCatCallback(response){
-	document.getElementById("cat").innerHtml = response.message;
-	document.getElementById("cat").innerHTML = response.message;
-}
-
-function getCat() {
-	var request = gapi.client.helloworldendpoints.getCat();
-	request.execute(getCatCallback);
-}
-
-function greetByPeriod(){
-	var name = document.getElementById("name_field").value;
-	var period = document.getElementById("period_field").value; 
-	var request = gapi.client.helloworldendpoints.greetByPeriod({'name': name, 'period':period});
-	request.execute(sayHelloCallback);
 }
 
 

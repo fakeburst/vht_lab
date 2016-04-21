@@ -1,0 +1,48 @@
+.previous{
+    margin-bottom: 0 !important;
+}
+
+.welcome{
+    height: 50%;
+    align-items: center;
+}
+
+.register{
+    height: 70%;
+}
+
+.welcome-text{
+    margin-top: 70px;
+}
+
+.color-main{
+    background-color: blueviolet;
+}
+
+.color-register{
+    background-color: forestgreen !important;
+}
+
+.borders-main{
+    height: 15%;
+    margin: 0px !important;
+    display: block !important;
+}
+
+.welcome-buttons{
+    height: 20%;
+}
+
+.color-quest{
+    background-color: cadetblue;
+}
+
+.borders-quest{
+    height: 5%;
+    margin: 0px !important;
+    display: block !important;
+}
+
+.color-quest-text{
+    color: white;
+}
